@@ -2,13 +2,18 @@ var express = require('express');
 var router = express.Router();
 var moment = require('moment'); // require
 const bcrypt = require('bcrypt');
+var multer  = require('multer');
 var asyncLib = require('async');
 var dateTime = require('node-datetime');
+var microtime = require('microtime');
 var dt = dateTime.create();
 var formatted = dt.format('Y-m-d H:M:S');
 var salt =10;
 
 var API_Key =1234;
+
+
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -304,4 +309,48 @@ router.post('/conducteur',function (req,res,next) {
 
 });
 
+router.post('uploadImage',function (req,res,next) {
+
+});
+
+router.post('/majprofile',function (req,res,next) {
+    if(req.body.key ==API_Key) {
+        moment.locale('fr');
+        var user_id = req.body.user_id;
+        var firstname = req.body.firstname;
+        var lastname = req.body.lastname;
+        var phone = req.body.phone;
+        var email = req.body.email;
+        var account_type = req.body.account_type;
+        var date_heure = formatted;
+        var mdp;
+
+        if(account_type==='client'){
+            req.getConnection(function (error,con) {
+                con.query('update user_app set nom=?,prenom=?,phone=?,email=?,modifier=? where id=?',
+                    [lastname,firstname,phone,email,date_heure,user_id],function (err,rows,field) {
+                       if(rows.affectedRows > 0){
+                           res.send(JSON.stringify({success:true,etat:1,message:"Success"}));
+                       }else {
+                           res.send(JSON.stringify({error:err}));
+                       }
+                    });
+            })
+        }else{
+            req.getConnection(function (error,con) {
+                con.query('update conducteur set nom=?,prenom=?,phone=?,email=?,modifier=? where id=?',
+                    [lastname,firstname,phone,email,date_heure,user_id],function (err,rows,field) {
+                        if(rows.affectedRows > 0){
+                            res.send(JSON.stringify({success:true,etat:1,message:"Success"}));
+                        }else {
+                            res.send(JSON.stringify({error:err}));
+                        }
+                    });
+            })
+        }
+
+    }else{
+        res.send(JSON.stringify({success:false,message:"Wrong API KEY"}))
+    }
+});
 module.exports = router;
