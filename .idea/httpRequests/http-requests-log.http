@@ -1,0 +1,36 @@
+POST http://localhost:3000/users/login
+content-type: application/json
+{:
+"key": "1234",
+"phone": "+22372104640"
+}:
+
+###
+
+POST http://localhost:3000/users/login
+content-type: application/json
+{:
+"key": "1234",
+"phone": "+22372104640"
+}:
+
+###
+
+POST http://localhost:3000/users/login
+content-type: application/json
+{:
+"key": "1234",
+"phone": "+22372104640"
+}:
+
+###
+
+POST http://localhost:3000/users/login
+content-type: application/json
+{:
+"key": "1234",
+"phone": "+22372104640"
+}:
+
+###
+

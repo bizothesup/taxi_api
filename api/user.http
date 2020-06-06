@@ -1,0 +1,10 @@
+//register user
+
+POST http://localhost:3000/users/login HTTP/1.1
+content-type: application/json
+
+{
+    "key": "1234",
+    "phone": "+22372104640"
+}
+
