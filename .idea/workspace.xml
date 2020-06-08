@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="73173078-d129-4298-b678-3ec1984c1421" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/utils/uploadImages.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/users.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/httpRequests/" />
@@ -30,13 +29,14 @@
     <session id="97403435">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="4" />
+          <entry key="project.closed" value="5" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.21" value="1" />
           <entry key="project.open.time.70" value="1" />
           <entry key="project.open.time.75" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.open.time.80" value="1" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -103,9 +103,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="192">
               <caret line="100" column="87" selection-start-line="100" selection-start-column="87" selection-end-line="100" selection-end-column="87" />
-              <folding>
-                <element signature="e#1001#1009#0" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -306,6 +303,7 @@
       <workItem from="1591246710868" duration="446000" />
       <workItem from="1591247203100" duration="15807000" />
       <workItem from="1591411571022" duration="3504000" />
+      <workItem from="1591499879718" duration="37000" />
     </task>
     <task id="LOCAL-00001" summary="inscription conducteur client et login client">
       <created>1591242513520</created>
@@ -332,12 +330,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58281000" />
+    <option name="totallyTimeSpent" value="58318000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2647504" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2685325" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -428,16 +427,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/uploadImages.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/user.http">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="47" selection-start-line="2" selection-start-column="47" selection-end-line="2" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/users.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
@@ -445,6 +434,16 @@
           <folding>
             <element signature="e#1001#1009#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/uploadImages.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user.http">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="47" selection-start-line="2" selection-start-column="47" selection-end-line="2" selection-end-column="47" />
         </state>
       </provider>
     </entry>

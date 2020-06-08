@@ -20,8 +20,8 @@ router.get("/", function (req, res, next) {
 router.post("/register", function (req, res, next) {
   if (req.body.key == API_Key) {
     moment.locale("fr");
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
+    var nom = req.body.prenom;
+    var prenom = req.body.nom;
     var phone = req.body.phone;
     var email = req.body.email;
     var login_type = req.body.login_type;
@@ -49,9 +49,9 @@ router.post("/register", function (req, res, next) {
                   }
                   else{
                     con.query(
-                      "insert into user_app(nom,prenom,email,phone,statut,login_type,tonotify,creer) " +
-                        "values (?,?,?,?,?,?,?,?)",
-                      [lastname,firstname,email,phone,"yes",login_type,tonotify,date_heure,],
+                      "insert into user_app(nom,prenom,phone,statut,login_type,tonotify,creer) " +
+                        "values (?,?,?,?,?,?,?)",
+                      [nom,prenom,phone,"yes",login_type,tonotify,date_heure,],
                       function (err, rows, field) {
                         if (err) {
                           res.status(500);
@@ -116,7 +116,7 @@ router.post("/login", function (req, res, next) {
                     JSON.stringify({
                       success: false,
                       message: err.message,
-                      etat: 0,
+                      etat: 2,
                     })
                   );
                 } else {
@@ -124,7 +124,7 @@ router.post("/login", function (req, res, next) {
                     user = rows[0];
                     done(null, user);
                   }else{
-                    res.send(JSON.stringify({ success: false,message:"Compte non Active", etat: 2 }));
+                    res.send(JSON.stringify({ success: false,message:"Compte non Active", etat: 3 }));
                   }
                 }
               }
@@ -397,6 +397,50 @@ router.post("/majprofile", function (req, res, next) {
   }
 });
 
-router;
+router.post("/update_fcm",function (req,res,next) {
+  if(req.body.key == API_Key){
+    var user_id = req.body.user_id;
+    var fcm_id = req.body.fcm_id;
+    var device_id= req.body.device_id;
+    var user_cat= req.body.user_cat;
+
+    if (user_cat === "client") {
+      req.getConnection(function (error, con) {
+        con.query(
+          "update user_app set fcm-id=?,device_id=? where id=?",
+          [fcm_id, device_id, user_id],
+          function (err, rows, field) {
+            if (rows.affectedRows > 0) {
+              res.send(
+                JSON.stringify({ success: true, etat: 1, message: "Success" ,user:rows[0]})
+              );
+            } else {
+              res.send(JSON.stringify({ error: err,etat:0 }));
+            }
+          }
+        );
+      });
+    } else {
+      req.getConnection(function (error, con) {
+        con.query(
+          "update conducteur set set fcm-id=?,device_id=? where id=?",
+          [fcm_id, device_id, user_id],
+          function (err, rows, field) {
+            if (rows.affectedRows > 0) {
+              res.send(
+                JSON.stringify({ success: true, etat: 1, message: "Success" ,user:rows[0]})
+              );
+            } else {
+              res.send(JSON.stringify({ error: err,etat:0 }));
+            }
+          }
+        );
+      });
+    }
+
+  }else{
+    res.send(JSON.stringify({ success: false, message: "Wrong API KEY" }));
+  }
+})
 
 module.exports = router;
