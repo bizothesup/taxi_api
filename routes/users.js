@@ -33,44 +33,120 @@ router.post("/register", function (req, res, next) {
 
     if (account_type == "client") {
         req.getConnection(function (err,con) {
-              con.query("select * from user_app where phone=?",[phone],function ( err,rows,field){
-                if (err) {
-                  res.status(500);
-                  res.send(JSON.stringify({ success: false, message: err.message }));
-                }else{
-                  if(rows.length >0){
-                    res.send(
-                      JSON.stringify({
-                        success: false,
-                        message: "Phone existe Déjà .......",
-                        etat: 2,
-                      })
-                    );
-                  }
-                  else{
-                    con.query(
-                      "insert into user_app(nom,prenom,phone,statut,login_type,tonotify,creer) " +
-                        "values (?,?,?,?,?,?,?)",
-                      [nom,prenom,phone,"yes",login_type,tonotify,date_heure,],
-                      function (err, rows, field) {
+            asyncLib.waterfall([
+                function (done) {
+                    con.query("select * from user_app where phone=?",[phone],function ( err,rows,field){
                         if (err) {
-                          res.status(500);
-                          res.send(JSON.stringify({ success: false, message: err.message }));
-                        } else {
-                          if (rows.affectedRows > 0) {
-                            res.send(JSON.stringify({success: true,message: "Success",etat: 1,user: rows[0],}));
-                          } 
-                          else {
-                            res.send(JSON.stringify({ success: false, message: "Vide" }));
-                          }
+                            res.status(500);
+                            res.send(JSON.stringify({ success: false, message: err.message }));
+                        }else{
+                            if(rows.length >0){
+                                res.send(
+                                    JSON.stringify({
+                                        success: false,
+                                        message: "Phone existe Déjà .......",
+                                        etat: 2,
+                                    })
+                                );
+                            }
+                            else{
+                               user = rows[0]
+                               done(null,user)
+                            }
                         }
-                      });
-                  }
+                    });
+
+                },
+                function (user,done) {
+                    if(!user){
+
+                        con.query(
+                            "insert into user_app(nom,prenom,phone,statut,login_type,tonotify,creer) " +
+                            "values (?,?,?,?,?,?,?)",
+                            [nom,prenom,phone,"yes",login_type,tonotify,date_heure,],
+                            function (err, rows, field) {
+                                if (err) {
+                                    res.status(500);
+                                    res.send(JSON.stringify({ success: false, message: err.message }));
+                                } else {
+                                    if (rows.affectedRows > 0) {
+                                       user = rows.insertId;
+                                        done(null,user)
+                                    }
+                                    else {
+                                        res.send(JSON.stringify({ success: false, message: "Vide" }));
+                                    }
+                                }
+                            });
+                    }
+                },
+                function (user,done) {
+                    if (user) {
+
+                        con.query(
+                            "select * from user_app where id=?",[user],
+                            function (err, rows, field) {
+                                if (rows.length > 0) {
+                                    user= rows[0];
+                                    done(null,user);
+                                }else{
+                                    res.send(JSON.stringify({ success: false, message: "User not found !!!!!" }));
+                                }
+                            }
+                        );
+                    }
+                },
+                function (user, done) {
+                    if (user) {
+                        user["user_cat"] = "client";
+                        user["online"] = "";
+
+                        con.query(
+                            "select * from currency where statut='yes' limit 1",
+                            function (err, rows, field) {
+                                if (rows.length > 0) {
+                                    user["currency"] = rows[0].symbole;
+                                    done(null, user);
+                                }else{
+                                    done(null, user);
+                                }
+                            }
+                        );
+                    }
+                },
+                function (user, done) {
+                    if (user) {
+                        con.query(
+                            "select * from country where statut='yes' limit 1",
+                            function (err, rows, field) {
+                                if (rows.length > 0) {
+                                    user["country"] = rows[0].code;
+                                    done(user);
+                                }else{
+                                    done(user);
+                                }
+                            }
+                        );
+                    }
                 }
-              });
-            
-  
+            ],function (user) {
+                if (user) {
+                    res.send(
+                        JSON.stringify({
+                            status: 200,
+                            success: true,
+                            message: "success",
+                            etat: 1,
+                            user: user,
+                        })
+                    );
+                } else {
+                    res.send(JSON.stringify({ success: false, etat: 2 }));
+                }
         })
+
+
+       })
     } else {
 
     }
@@ -407,7 +483,7 @@ router.post("/update_fcm",function (req,res,next) {
     if (user_cat === "client") {
       req.getConnection(function (error, con) {
         con.query(
-          "update user_app set fcm-id=?,device_id=? where id=?",
+          "update user_app set fcm_id=?,device_id=? where id=?",
           [fcm_id, device_id, user_id],
           function (err, rows, field) {
             if (rows.affectedRows > 0) {
