@@ -1,8 +1,8 @@
 var config = {
     database:{
         host:'localhost',
-        user:'dev',
-        password:'dev',
+        user:'root',
+        password:'root',
         port:3306,
         db:'taxi_demande'
     }
